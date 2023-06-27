@@ -107,14 +107,6 @@ class MainWindow(QMainWindow):
         # TODO
         pass
 
-    def _load_ui(self):
-        loader = QUiLoader()
-        path = os.path.join(os.path.dirname(__file__), "form.ui")
-        ui_file = QFile(path)
-        ui_file.open(QFile.ReadOnly)
-        self._ui = loader.load(ui_file, self)
-        ui_file.close()
-
     def _add_box_event(self, name, func='_get_box_value'):
         getattr(self._ui, name).stateChanged.connect(getattr(self, func))
         self._check_box_state[name] = CheckBoxEnum.DEFAULT
