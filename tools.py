@@ -34,7 +34,7 @@ class RenameTool:
     named = []
     errors = []
     _cmp = re.compile(r"\d{3,6}\S{2,5}")
-    _name_cmp = re.compile(r'(\d{1,3}\.\d{1,2})|(\d{1,3}-\d{1,2})')
+    _name_cmp = re.compile(r'((\d{1,3}\.\d{1,2})|(\d{1,3}-\d{1,2})|(^\d+))')
     _chapter_cmp = re.compile(r'([\u4e00-\u9fa5].+)|([a-zA-Z].+)\S+')
 
     @staticmethod
@@ -96,9 +96,6 @@ class RenameTool:
         return None
 
     def _rename_rule(self, old):
-        word = self._remove(old)
-        if word:
-            old = old.replace(word, "")
         tmp = old.replace('_', '')
         return tmp.strip()
 
@@ -142,8 +139,6 @@ class RenameTool:
             return
 
         tmp = self._rename_rule(file)
-        if '.' not in tmp:
-            return
 
         flag, title = self._get_chapter(tmp)
         name = ''

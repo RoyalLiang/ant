@@ -142,6 +142,7 @@ class MainWindow(QMainWindow):
             custom_name=self._custom_name, filter_folder=self._check_box_state.get('filterFolder'), prefix=self._prefix,
             suffix=self._suffix, rule_folder=self._check_box_state.get('ruleFolder')
         )
+        self._ui.namedList.clear()
         self._ui.namedList.setPlainText('\n'.join(names))
 
     def _show_message(self, *, title, message):
