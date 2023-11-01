@@ -34,7 +34,7 @@ miniRenameTool
 
 ---
 
-- Python3.7+
+- Python3.10+
 - PyQT 6.0+
 
 ### 构建

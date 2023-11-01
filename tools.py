@@ -10,7 +10,7 @@ forbid_cat_list = [
     'launch', 'json', 'STL', 'stl', 'xacro', 'rviz', 'world', 'h', 'msg', 'so', 'pyc', 'srv', 'vmdk', 'plist', 'lck',
     'rst', 'pkl', 'sh', 'scala', 'iml', 'rpm', 'go', 'conf', 'jar', 'log', 'exe', 'pid', 'lnk', 'vcxproj', 'filters',
     'lastbuildstate', 'idb', 'sln', 'sdf', 'suo', 'tlog', 'pdb', 'obj', 'log', 'ilk', 'ts', 'lrc', 'sv', 'svh', 'apk',
-    'pak', 'mqb'
+    'pak', 'mqb', 'jmx'
 
 ]
 
