@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QFileSystemModel, QFileDialog, QMessageBox, QMainW
 from ANT.env import env
 from ANT.rename import ant
 from libs.enums import NamePositionEnum, NameRuleEnum
+from libs.messages import error_message, check_for_update_message, about_message
 from ui_form import Ui_MainWindow
 
 
@@ -74,6 +75,9 @@ class MainWindow(QMainWindow):
 
     def _load_slot(self):
 
+        self._ui.about.triggered.connect(self._on_about_box)
+        self._ui.checkUpdate.triggered.connect(self._on_check_for_update)
+
         self._ui.dirButton.clicked.connect(self._open_folder_dialog)
         self._ui.deleteButton.clicked.connect(self._open_file)
         self._ui.filterButton.clicked.connect(self._open_file)
@@ -87,6 +91,16 @@ class MainWindow(QMainWindow):
         self._ui.deleteCache.toggled.connect(self._on_delete_cache)
         self._ui.forbidCache.toggled.connect(self._on_forbid_cache)
         self._ui.filterFolder.toggled.connect(self._on_filter_folder)
+
+    def _on_about_box(self):
+        mbox = QMessageBox(self)
+        mbox.setWindowIcon(QIcon(str(env.base_dir.joinpath('images/avatar.png'))))
+        mbox.setWindowTitle('ANT | About')
+        mbox.setText(about_message)
+        mbox.exec_()
+
+    def _on_check_for_update(self):
+        self._show_message(title='ANT | Check for update', message=check_for_update_message)
 
     def _on_filter_cache(self) -> None:
         env.fs_cache = self._ui.filterCache.isChecked()
@@ -120,7 +134,7 @@ class MainWindow(QMainWindow):
             return
 
         self._ui.namedList.clear()
-        ant.rename()
+        ant.rename(root=env.str_path)
         if env.cleans:
             self._show_message(title='ANT | 清洁剂', message='\n'.join(env.cleans))
         self._ui.namedList.setPlainText('\n'.join(env.fulls))
@@ -128,7 +142,7 @@ class MainWindow(QMainWindow):
     def _check(self):
         env.path = Path(env.str_path).resolve()
         if not env.path.exists() or not env.str_path:
-            self._show_message(title='ANT | 错误提示', message=f'路径 {env.str_path} 不存在')
+            self._show_message(title='ANT | 错误提示', message=error_message.format(message=f'路径 {env.str_path} 不存在'))
             return False
 
         self._check_texts()
@@ -171,7 +185,6 @@ class MainWindow(QMainWindow):
         message_box.setWindowTitle(title)
 
         ok = message_box.addButton("OK", QMessageBox.ButtonRole.YesRole)
-        message_box.setTextFormat(Qt.PlainText)
         message_box.setText(message)
         message_box.exec_()
 

@@ -39,21 +39,21 @@ class ANT:
                     self._name_rule = NameRuleEnum.BackAndFolder
                 self._name_rule = NameRuleEnum.Backend
 
-    def rename(self):
-        paths = os.listdir(env.str_path)
+    def rename(self, *, root: str):
+        paths = os.listdir(root)
         for p in paths:
             if p.startswith('.') and env.ignore_hide:
                 continue
 
-            abs_path = Path(env.str_path + os.sep + p).resolve()
+            abs_path = Path(root + os.sep + p).resolve()
             if self._delete_check(abs_path):
                 continue
 
             is_dir = os.path.isdir(abs_path)
             if is_dir:
                 new_root = self._op_dir(abs_path, env.filter_folder)
-                env.fulls.append(str(new_root))
-                self.rename()
+                env.fulls.append(new_root.name)
+                self.rename(root=str(new_root))
             else:
                 self._op_file(abs_path)
 
