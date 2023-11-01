@@ -2,10 +2,10 @@
 from pathlib import Path
 
 import PySide6
-from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QFileSystemModel, QFileDialog, QMessageBox, QMainWindow, QApplication, QSizePolicy
+from PySide6.QtWidgets import QFileSystemModel, QFileDialog, QMessageBox, QMainWindow
 
+from ANT.dialog import CleansDataDialog
 from ANT.env import env
 from ANT.rename import ant
 from libs.enums import NamePositionEnum, NameRuleEnum
@@ -136,7 +136,8 @@ class MainWindow(QMainWindow):
         self._ui.namedList.clear()
         ant.rename(root=env.str_path)
         if env.cleans:
-            self._show_message(title='ANT | 清洁剂', message='\n'.join(env.cleans))
+            self._show_cleans_text()
+            # self._show_message(title='ANT | 清洁剂', message='\n'.join(env.cleans))
         self._ui.namedList.setPlainText('\n'.join(env.fulls))
 
     def _check(self):
@@ -179,19 +180,23 @@ class MainWindow(QMainWindow):
                 else:
                     env.name_rule = NameRuleEnum.Backend
 
+    def _get_public_box(self, *, title: str):
+        box = QMessageBox(self)
+        box.setWindowTitle(title)
+        box.setWindowIcon(QIcon(str(env.base_dir.joinpath('images/avatar.png'))))
+        return box
+
+    @staticmethod
+    def _show_cleans_text():
+        dialog = CleansDataDialog()
+        dialog.exec_()
+
     def _show_message(self, *, title, message):
-        message_box = QMessageBox(self)
-        message_box.setWindowIcon(QIcon(str(env.base_dir.joinpath('images/avatar.png'))))
+        message_box = self._get_public_box(title=title)
         message_box.setWindowTitle(title)
 
-        ok = message_box.addButton("OK", QMessageBox.ButtonRole.YesRole)
         message_box.setText(message)
         message_box.exec_()
-
-        if message_box.clickedButton() == ok:
-            clipboard = QApplication.clipboard()
-            clipboard.setText(message_box.text())
-            message_box.close()
 
     def _load_tree_view(self, p):
         model = QFileSystemModel()
