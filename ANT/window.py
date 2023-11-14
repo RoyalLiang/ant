@@ -2,7 +2,7 @@
 from pathlib import Path
 
 import PySide6
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QFont
 from PySide6.QtWidgets import QFileSystemModel, QFileDialog, QMessageBox, QMainWindow
 
 from ANT.dialog import CleansDataDialog
@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
 
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
+        self.setFont(QFont("Microsoft YaHei", 30, QFont.Bold))
         self._load_slot()
         self._init()
 
@@ -137,7 +138,6 @@ class MainWindow(QMainWindow):
         ant.rename(root=env.str_path)
         if env.cleans:
             self._show_cleans_text()
-            # self._show_message(title='ANT | 清洁剂', message='\n'.join(env.cleans))
         self._ui.namedList.setPlainText('\n'.join(env.fulls))
 
     def _check(self):
@@ -200,9 +200,10 @@ class MainWindow(QMainWindow):
 
     def _load_tree_view(self, p):
         model = QFileSystemModel()
-        model.setRootPath(p)
-        self._ui.originList.setModel(model)
-        self._ui.originList.setRootIndex(model.index(p))
+        if p:
+            model.setRootPath(p)
+            self._ui.originList.setModel(model)
+            self._ui.originList.setRootIndex(model.index(p))
 
     def _open_file(self):
 

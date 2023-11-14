@@ -8,6 +8,7 @@ import sys
 
 import qdarkstyle
 from PySide6 import QtWidgets
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QWidget
 
 from ANT.window import MainWindow
@@ -19,7 +20,7 @@ if __name__ == "__main__":
 
     widget = MainWindow()
     widget.setWindowTitle('ANT(批量文件命名小工具)')
-    widget.setMaximumSize(1090, 885)
+    # widget.setMaximumSize(1090, 885)
     widget.show()
 
     sys.exit(app.exec())

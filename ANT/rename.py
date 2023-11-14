@@ -12,7 +12,8 @@ __all__ = ['ant']
 
 class ANT:
     _num_cmp = re.compile(r'((\[\d+)(-+|\.)\d+](-+|\.+)\d+(-+|\.+)\d+)|(\d+(-+|\.+)\d+)|(\d+)')
-    _chapter_cmp = re.compile(r'((\d{1,3}\.\d{1,2})|(\d{1,3}-\d{1,2})|(^\d+))')
+    # _chapter_cmp = re.compile(r'((\d{1,3}\.\d{1,2})|(\d{1,3}-\d{1,2})|(^\d+))')
+    _chapter_cmp = re.compile(r'\d+([.-]+\d+)+|\d+')
     _chapter_content_cmp = re.compile(r'([\u4e00-\u9fa5].+)|([a-zA-Z].+)\S+')
 
     def __init__(self) -> None:
@@ -76,6 +77,7 @@ class ANT:
 
         dc = list(filter(lambda x: p.startswith(x), env.ds))
         if dc:
+            print(dc)
             os.remove(path)
             return
 
@@ -101,7 +103,11 @@ class ANT:
             title = self._get_new_name(title)
 
         new = Path(path.parent.joinpath(title + '.' + cat))
-        os.rename(path, new)
+        try:
+            os.rename(path, new)
+        except FileExistsError:
+            new = Path(path.parent.joinpath(title + '1' + '.' + cat))
+            os.rename(path, new)
         env.fulls.append(str(new.name))
 
     @staticmethod
@@ -125,7 +131,8 @@ class ANT:
     @staticmethod
     def _delete_check(path: Path) -> bool:
         if path.name in env.ds:
-            shutil.rmtree(str(path))
+            # shutil.rmtree(str(path))
+            os.remove(path)
             return True
         return False
 
